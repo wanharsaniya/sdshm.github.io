@@ -3,7 +3,7 @@ async function init() {
   class WorldMap {
     constructor(svg) {
       this.height = 960;
-      this.width = 600;
+      this.width = 450;
       this.x_leg = 900;
       this.y_leg = 275;
       this.svg = svg;
