@@ -1,0 +1,231 @@
+<div id="scene_3">
+  <style>
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+    }
+  </style>
+  <!-- Step 1. Load D3 and topoJSON libraries -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="lib/common.js"></script>
+
+  <div id="chart_1">
+    <p style="text-align: center"><strong> <mark> Reduction in Population Growth Rate from Ending Child Marriage </mark>
+        <mark></mark></strong></p>
+    <text id="antText"></text>
+  </div>
+  <div id="chart_2">
+    <!--
+
+  <p><strong> <mark>Predicted Fertility with and without Child Marriage</mark>
+      <mark></mark></strong></p>
+  <text id="antText"></text>
+  -->
+  </div>
+
+  <script>
+    async function init() {
+      currentSlide = 3;
+
+      //alert("ToolTip and Annotation Pending : The effects depend on the country, ranging from fairly small impacts in the case of Pakistan to very large impacts in the case of Niger.")
+
+      var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      generateParameter();
+      var scene_3_message = "<p>Across countries, ending child marriage and early childbirths would reduce population growth substantially under current conditions.</p>"
+        + "<p> Over time, the annual reductions in population growth are cumulative. This means that the reduction in the populations of many countries by the year 2030 from ending child marriage and early childbirths is far from negligible. In Niger, which is the country with the largest impacts, the population by 2030 could be 5.4 percent smaller if child marriage and early childbirths had been eliminated beginning in 2014. This is a large effect with important implications in terms of both standards of living and the provision of public services. The same is observed for many other countries, even if the overall reduction in population growth is smaller than in the case of Niger.</p>"
+      generateMessage(scene_3_message);
+      handlers();
+
+      var chartwidth = 880,
+        chartheight = 500;
+      var margin = {
+        top: 40,
+        right: 30,
+        bottom: 60,
+        left: 80
+      },
+        height = chartheight - margin.top - margin.bottom,
+        width = chartwidth - margin.left - margin.right;
+      var pop_growth_rate = await d3.csv("data/population_growth_rate.csv");
+      var countries = []
+      var pop_growth_rate_2015 = []
+      var pop_growth_rate_2030 = []
+      for (var i = 0; i < pop_growth_rate.length; i++) {
+        countries.push(pop_growth_rate[i].name);
+        pop_growth_rate_2015.push(pop_growth_rate[i].year_2015);
+        pop_growth_rate_2030.push(pop_growth_rate[i].year_2030);
+      }
+      console.log(countries);
+      console.log(pop_growth_rate_2015);
+      console.log(pop_growth_rate_2030);
+      var parameterSelected = pop_growth_rate_2015;
+
+      // append the svg object to the body of the page
+      var svg = d3.select("#chart_1")
+        .append("svg")
+        .attr("id", "pop_growth_compare")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+      //lightseagreen --> #20B2AA lightcolral --> #F08080
+      plotBarChartForPopulationGrowt(svg, pop_growth_rate_2015, 10, "#F08080", "plot1", [0, 0.4], "Reuction in Population Growth Rate");
+      annotate(svg, 610, 120, 610, 350, 10, "Small Impacts for Pakistan");
+      annotate(svg, 580, 5, 530, 5, 10, "Large impacts for Niger");
+      //plotBarChartForPopulationGrowt(svg, pop_growth_rate_2030, 0, "#20B2AA", "plot1",[0,0.4]);
+
+
+      function plotBarChartForPopulationGrowt(svg, parameterSelected, shift, color_code, id_str, ydomain, yAxisLabel) {
+
+        // X axis
+        var x = d3.scaleBand()
+          .range([0, width])
+          .domain(pop_growth_rate.map(function (d) { return d.name; }))
+          .padding(0.2);
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .attr("id", id_str)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("transform", "translate(-10,0)rotate(-45)")
+          .style("text-anchor", "end");
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain(ydomain)
+          //.domain([0, 40])
+          .range([height, 0]);
+        svg.append("g")
+          .attr("id", id_str)
+          .call(d3.axisLeft(y));
+
+        svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left + 25)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .style('fill', 'darkOrange')
+          .text(yAxisLabel);
+
+        // Bars
+        svg.selectAll()
+          .data(parameterSelected)
+          .enter()
+          .append("rect")
+          .attr("id", id_str)
+          .attr("x", function (d, i) {
+            console.log(x(countries[i]))
+            return x(countries[i]) + parseInt(shift);
+          })
+          .attr("y", function (d, i) {
+            console.log(y(parameterSelected[i]));
+            return y(parameterSelected[i]);
+          })
+          .attr("width", x.bandwidth() / 4)
+          .attr("height", function (d, i) {
+            console.log(height)
+            console.log(y(parameterSelected[i]))
+            return height - parseInt(y(parameterSelected[i]));
+            //return parseInt(height) - parseInt(y(marriedBy13)); 
+          })
+          .attr("fill", color_code)
+          .on("mousemove", function (d, i) {
+            tooltip.classed("hidden", false)
+              .style("top", (d3.event.pageY) + "px")
+              .style("left", (d3.event.pageX + 10) + "px")
+              .style("opacity", .9)
+              .html(generateHTMLForToolTip(d, i));
+            //console.log("onmousemove");
+          })
+          .on("mouseout", function (d, i) {
+            //d3.select(this).attr("fill","white").attr("stroke-width",1);
+            tooltip.classed("hidden", true)
+              .style("opacity", 0);
+          });
+
+
+        // Text
+        svg.selectAll("bar.txt")
+          .data(parameterSelected)
+          .enter()
+          .append("text")
+          .attr("x", function (d, i) {
+            console.log(x(countries[i]))
+            return x(countries[i]) + parseInt(shift);
+          })
+          .attr("y", function (d, i) {
+            console.log(y(parameterSelected[i]));
+            return y(parameterSelected[i]);
+          })
+          .text(function (d, i) { return parameterSelected[i]; })
+          .attr("fill", color_code)
+          .style("font", "12px times");
+      }
+
+      function generateParameter() {
+        $("#parameter").html("");
+
+        $("#parameter").append('<input type="checkbox" id="PopulatioN_Growth_2015" name="child_marriage" value="PopulatioN_Growth_2015" checked disabled > <label for="PopulatioN_Growth_2015">2015</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+        $("#parameter").append('<input type="checkbox" id="PopulatioN_Growth_2030" name="child_marriage" value="PopulatioN_Growth_2030" > <label for="PopulatioN_Growth_2030">2030</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+      }
+
+      function handlers() {
+
+        //  clearAnnotation(svg);
+        d3.select("#parameter").on("change", function (d) {
+          is_checked_PopulatioN_Growth_2030 = d3.select("#PopulatioN_Growth_2030").property("checked");
+          if (is_checked_PopulatioN_Growth_2030) {
+            svg.selectAll("*").remove();
+            plotBarChartForPopulationGrowt(svg, pop_growth_rate_2015, 10, "#F08080", "plot1", [0, 0.4], "Reduction in Population Growth Rate");
+            plotBarChartForPopulationGrowt(svg, pop_growth_rate_2030, 0, "#20B2AA", "plot1", [0, 0.4], "Reduction in Population Growth Rate");
+          }
+          else {
+            svg.selectAll("*").remove();
+            plotBarChartForPopulationGrowt(svg, pop_growth_rate_2015, 10, "#F08080", "plot1", [0, 0.4], "Reduction in Population Growth Rate");
+          }
+          annotate(svg, 610, 120, 610, 350, 10, "Small Impacts for Pakistan");
+          annotate(svg, 580, 5, 530, 5, 10, "Large impacts for Niger");
+
+        });
+      }
+
+      function generateHTMLForToolTip(d, i) {
+        var tooltipHTML = "<p>";
+        tooltipHTML += "Country : ";
+        console.log(i);
+        tooltipHTML += countries[i];
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "Reduction in Population Growth Rate By Abolishing Child Marriage by year :";
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  2015 : ";
+        tooltipHTML += pop_growth_rate_2015[i];
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  2030: ";
+        tooltipHTML += pop_growth_rate_2030[i];
+        tooltipHTML += "<br></br></p>"
+        return tooltipHTML;
+      }
+
+
+      function generateMessage(message) {
+        $("#scene-message").html("<p>" + message + "</p>");
+      }
+
+      //annotate(svg, 100, 10, 25, 50, 10, "18% Reduction In Fertility by abolishing child marriage");
+    }
+  </script>
+</div>
+

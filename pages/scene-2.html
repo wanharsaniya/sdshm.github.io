@@ -1,0 +1,303 @@
+<!--
+  http://bl.ocks.org/larskotthoff/601c66edfb83a11cf2bb
+-->
+<div id="scene_2">
+  <style>
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      padding: 2px;
+      font: 10px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+    }
+  </style>
+
+  <!-- Step 1. Load D3 and topoJSON libraries -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="lib/common.js"></script>
+
+  <div id="chart_1">
+    <p style="text-align: center"><strong> <mark>Impact on Fertiliyt at married By13 vs 17</mark>
+        </strong></p>
+    <text id="antText"></text>
+  </div>
+  <div id="chart_2">
+    <br></br>
+    <br></br>
+    <p style="text-align: center"><strong> <mark>Predicted Fertility Rate</mark> </strong>
+    <strong style="color:#F08080">  With </strong> <mark>vs</mark>
+    <strong style="color:#20B2AA">Without</strong> 
+    <strong> <mark>Child Marriage </mark></strong> </p>
+    <text id="antText"></text>
+  </div>
+
+  <script>
+    async function init() {
+
+      currentSlide = 2;
+
+      var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+
+      generateParameter();
+      var scene_2_message = "<p>Child marriage contributes to women both having children earlier and having more children over their lifetime than if they had married later. In turn, the effects of child marriage on fertility have implications for population growth, economic welfare,</p>"
+       + "<p> Total fertility is defined as the number of live births that women are (statistically) expected to have over their lifetime under current conditions. Controlling for other factors affecting total fertility, on average across 15 countries, a girl marrying at 13 will have 26 percent more children over her lifetime than if she had married at 18 or later</p>"
+      + "<p>Child marriage contributes to higher total fertility as women marrying earlier tend to both have children earlier and more children over their lifetime than if they had married later.</p>"
+       + "<p> In all countries, the impact at the margin of child marriage on total fertility tends to be large. </p>"
+       + "<p>  If child marriage were eliminated, this would reduce total fertility on average by 0.59 live births across countries, the equivalent of a reduction of 11 percent versus current values </p>"
+      generateMessage(scene_2_message);
+      handlers()
+
+      var chartwidth = 880,
+        chartheight = 212;
+      var margin = {
+        top: 40,
+        right: 30,
+        bottom: 60,
+        left: 80
+      },
+        height = chartheight - margin.top - margin.bottom,
+        width = chartwidth - margin.left - margin.right;
+      var fertility_data = await d3.csv("data/child_marriage_imapct_on_fertility.csv");
+      //console.log(fertility_data)
+      var countries = []
+      var marriedBy13 = []
+      var marriedBy17 = []
+      var predictedFertiltiy = []
+      var predictedFertiltiyWOCHildMarriage = []
+      var absDiff = []
+      var reductionInFertilityPercent = []
+      for (var i = 0; i < fertility_data.length; i++) {
+        countries.push(fertility_data[i].name);
+        marriedBy13.push(fertility_data[i].Imapact_Of_Marrying_at_13);
+        marriedBy17.push(fertility_data[i].Imapact_Of_Marrying_at_17);
+        predictedFertiltiy.push(fertility_data[i].Predicted_Total_Fertility);
+        predictedFertiltiyWOCHildMarriage.push(fertility_data[i].Predicted_Total_Fertility_WO_Child_Marriage);
+        reductionInFertilityPercent.push(fertility_data[i].Reduction_In_Fertility);
+      }
+      //console.log(countries);
+      //console.log(marriedBy17);
+      //console.log(marriedBy13);
+      //console.log(predictedFertiltiy);
+      //console.log(predictedFertiltiyWOCHildMarriage);
+
+      var parameterSelected = marriedBy17
+
+      // append the svg object to the body of the page
+      var svg_1 = d3.select("#chart_1")
+        .append("svg")
+        .attr("id", "fertility_compare")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+      var svg_2 = d3.select("#chart_2")
+        .append("svg")
+        .attr("id", "fertility_compare")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+      //plotChart1 lightseagreen --> #20B2AA lightcolral --> #F08080
+      //plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40]);
+      plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
+
+
+      //plotChart2
+      plotbarChart(svg_2, predictedFertiltiy, 10, "#F08080", "#FF8C00", [0, 8], "Fertility Rate");
+      plotbarChart(svg_2, predictedFertiltiyWOCHildMarriage, 0, "#20B2AA", "plot1", [0, 8]);
+      annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh Benifits most by abolishing child marriage");
+
+      //alert("Clear SVG")
+      //svg_2.selectAll("*").remove();
+      //plotbarChart(svg_2, reductionInFertilityPercent, 0, "blue", "plot1", [0, 25]);
+
+      function plotbarChart(svg, parameterSelected, shift, color_code, id_str, ydomain, yAxisLabel, parameterText = "") {
+
+        // X axis
+        var x = d3.scaleBand()
+          .range([0, width])
+          .domain(fertility_data.map(function (d) { return d.name; }))
+          .padding(0.2);
+
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .attr("id", id_str)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("transform", "translate(-10,0)rotate(-45)")
+          .style("text-anchor", "end");
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain(ydomain)
+          //.domain([0, 40])
+          .range([height, 0]);
+
+        svg.append("g")
+          .attr("id", id_str)
+          .call(d3.axisLeft(y));
+
+        svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left / 2)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .style('fill', 'darkOrange')
+          .text(yAxisLabel);
+
+        // Bars
+        svg.selectAll()
+          .data(parameterSelected)
+          .enter()
+          .append("rect")
+          .attr("id", id_str)
+          .attr("x", function (d, i) {
+            //console.log(x(countries[i]))
+            return x(countries[i]) + parseInt(shift);
+          })
+          .attr("y", function (d, i) {
+            //console.log(y(parameterSelected[i]));
+            return y(parameterSelected[i]);
+          })
+          .attr("width", x.bandwidth() / 4)
+          .attr("height", function (d, i) {
+            //console.log(height)
+            //console.log(y(parameterSelected[i]))
+            return height - parseInt(y(parameterSelected[i]));
+            //return parseInt(height) - parseInt(y(marriedBy13)); 
+          })
+          .attr("fill", color_code)
+          .on("mousemove", function (d, i) {
+            tooltip.classed("hidden", false)
+              .style("top", (d3.event.pageY) + "px")
+              .style("left", (d3.event.pageX + 10) + "px")
+              //.style("top",  (d3.mouse(this)[1]) + "px")
+              //.style("left",  "px")
+              //          .style("width", "200")
+              //          .style("height", "200")
+              .style("opacity", .9)
+              .html(generateHTMLForToolTip(d, i));
+
+            //console.log("onmousemove");
+          })
+          .on("mouseout", function (d, i) {
+            //d3.select(this).attr("fill","white").attr("stroke-width",1);
+            tooltip.classed("hidden", true)
+              .style("opacity", 0);
+          });
+
+
+
+        //Text
+        svg.selectAll("text.bar")
+          .data(parameterSelected)
+          .enter()
+          .append("text")
+          .attr("x", function (d, i) {
+            return x(countries[i]) + parseInt(shift);
+          })
+          .attr("y", function (d, i) {
+            //console.log(y(parameterSelected[i]));
+            return y(parameterSelected[i]) - 5;
+          })
+          .text(function (d, i) { return parameterSelected[i] + parameterText; })
+          .attr("fill", color_code)
+          .style("font", "12px times");
+      }
+      function generateParameter() {
+        $("#parameter").html("");
+
+        $("#parameter").append('<input type="checkbox" id="Female_Married_by_13" name="child_marriage" value="Female_Married_by_13" > <label for="Female_Married_by_13">Impact of Fertility % when marrying at 13 </label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+        $("#parameter").append('<input type="checkbox" id="Female_Married_by_17" name="child_marriage" value="Female_Married_by_17" checked disabled> <label for="Female_Married_by_17">Impact of Fertility % when marrying at 17</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+        $("#parameter").append('<input type="checkbox" id="Reduction_In_Fertility" name="child_marriage" value="Reduction_In_Fertility" > <label for="Reduction_In_Fertility">% Reduction In Fertility by abolishing child marriage</label> ');
+
+      }
+
+      function handlers() {
+
+        //  clearAnnotation(svg);
+        let plot_married_by_13 = false;
+        let plot_married_by_17 = false;
+        d3.select("#parameter").on("change", function (d) {
+          plot_married_by_13 = d3.select("#Female_Married_by_13").property("checked");
+          plot_married_by_17 = true; //d3.select("#Female_Married_by_17").property("checked");
+          if (plot_married_by_13 && plot_married_by_17) {
+            svg_1.selectAll("*").remove();
+            plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
+            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "", "%");
+          }
+          else if (plot_married_by_17) {
+            svg_1.selectAll("*").remove();
+            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
+          }
+          else if (plot_married_by_13) {
+            svg_1.selectAll("*").remove();
+            plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
+
+          }
+          else {
+            svg_1.selectAll("*").remove();
+            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
+            d3.select("#Female_Married_by_17").property("checked").property("checked", true);
+          }
+
+
+          plot_reduction_in_fertility_percentage = d3.select("#Reduction_In_Fertility").property("checked");
+          if (plot_reduction_in_fertility_percentage) {
+            svg_2.selectAll("*").remove();
+            plotbarChart(svg_2, reductionInFertilityPercent, 0, "#20B2AA", "plot1", [0, 25], "Reduction In Fertility %", "%");
+            annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh Benifits most by abolishing child marriage");
+          }
+          else {
+            //plotChart2
+            svg_2.selectAll("*").remove();
+            plotbarChart(svg_2, predictedFertiltiy, 10, "#F08080", "#FF8C00", [0, 8], "Fertility Rate");
+            plotbarChart(svg_2, predictedFertiltiyWOCHildMarriage, 0, "#20B2AA", "plot1", [0, 8]);
+            annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh Benifits most by abolishing child marriage");
+          }
+        });
+
+      }
+
+      function generateHTMLForToolTip(d, i) {
+        var tooltipHTML = "<p>";
+        tooltipHTML += "Country : ";
+        console.log(i);
+        tooltipHTML += countries[i];
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "Impact on Fertility by child marriage at :";
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  Age 13 : ";
+        tooltipHTML += marriedBy13[i];
+        tooltipHTML += " %";
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  Age 17: ";
+        tooltipHTML += marriedBy17[i];
+        tooltipHTML += " %";
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "Fertily Reduces by "
+        tooltipHTML += reductionInFertilityPercent[i];
+        tooltipHTML += "% by aboloshing child marriage";
+        tooltipHTML += "<br></br>"
+        return tooltipHTML;
+      }
+      function generateMessage(message) {
+        $("#scene-message").html("<p>" + message + "</p>");
+      }
+    }
+  </script>
+</div>

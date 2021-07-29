@@ -1,0 +1,277 @@
+<!--
+    https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89
+-->
+<div id="scene_4">
+  <style>
+    .bar {
+      fill: steelblue;
+    }
+
+    .bar:hover {
+      fill: brown;
+    }
+
+    .axis--x path {
+      display: none;
+    }
+
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 3px;
+    }
+
+    .circle {
+      fill: steelblue;
+    }
+
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+    }
+  </style>
+  <div id="chart_1">
+    <p style="text-align: center"><strong> <mark>Welfare Cost of Child Marriage and Early Childbirths Due to Population Growth</mark>
+        <mark></mark></strong></p>
+    <text id="antText"></text>
+  </div>
+  <script>
+    async function init() {
+      currentSlide = 4;
+      var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      generateParameter();
+      var scene_4_message = 
+                  "<p>Cross-country analyses demonstrate a one-to-one relationship between population growth and growth in GDP per capita. The relationship between economic and population growth can be used to assess benefits from a reduction in population growth from ending child marriage and early childbirths. Regression analysis suggests that controlling for other variables including population growth, child marriage does not have a direct impact on growth in GDP per capita</p>"
+                   +"<p>Globally (for 106 countries), the welfare benefits that would be reaped through lower population growth from ending child marriage reach $566 billion per year in 2030. The benefits are valued at $22 billion in 2015 and $566 billion in 2030</p>"
+                   + "<p>he rapid increase in the benefits stems from the fact that the impact of child marriage and early childbirths on population growth is cumulative. </p>" 
+                  + "<p>Economic benefit from reduced population growth is the reduced pressure for state budgets to provide services to the population.</p>"
+                  + "<p>By reducing the size of cohorts, ending child marriage and early childbirth would provide significant savings for the education budget of many countries.</p>"
+
+      generateMessage(scene_4_message);
+      handlers();
+
+      var chartwidth = 880,
+        chartheight = 500;
+      var margin = {
+        top: 40,
+        right: 30,
+        bottom: 60,
+        left: 80
+      },
+        height = chartheight - margin.top - margin.bottom,
+        width = chartwidth - margin.left - margin.right;
+
+
+      var cost = await d3.csv("data/cost_of_child_marriage.csv");
+      var year = []
+      var cost_of_child_marriage_in_billion = []
+      var cost_of_early_childbirth_in_billion = [];
+      var cumulative_cost = [];
+
+
+      for (var i = 0; i < cost.length; i++) {
+        year.push(cost[i].year);
+        cost_of_child_marriage_in_billion.push(cost[i].cost_of_child_marriage_in_billion);
+        cost_of_early_childbirth_in_billion.push(cost[i].cost_of_early_childbirth_in_billion);
+        cumulative_cost.push(parseFloat(cost[i].cost_of_child_marriage_in_billion) + parseFloat(cost[i].cost_of_early_childbirth_in_billion));
+      }
+      //console.log(year);
+      //console.log(cost_of_child_marriage_in_billion);
+      //console.log(cost_of_early_childbirth_in_billion);
+      console.log("cumulative cost")
+      console.log(cumulative_cost);
+
+      var svg = d3.select("#chart_1")
+        .append("svg")
+        .attr("id", "cost_of_child_marriage")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+      parameterSelected = cost_of_child_marriage_in_billion;
+      //plotChart1 lightseagreen --> #20B2AA lightcolral --> #F08080
+      plotLineChart(svg, parameterSelected, 0, " #F08080", "plot1", [0, 750], "child marriage cost", "Cost In US $ Billion");
+
+      //parameterSelected = cost_of_early_childbirth_in_billion;
+      //plotLineChart(svg, parameterSelected, 0, "orange", "plot2", [0, 1300],"early child birth cost");
+      //parameterSelected = cumulative_cost;
+      //plotLineChart(svg, parameterSelected, 0, "cyan", "plot3", [0, 1300],"cumulative cost");
+
+
+      function plotLineChart(svg, parameterSelected, shift, color_code, id_str, ydomain, lineText, yAxisLabel, annotateChart = "") {
+
+        // X axis
+        var x = d3.scaleBand()
+          .range([0, width])
+          .domain(cost.map(function (d) { return d.year; }))
+          .padding(0.2);
+
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .attr("id", id_str)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("transform", "translate(-10,0)rotate(-45)")
+          .style("text-anchor", "end");
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain(ydomain)
+          //.domain([0, 40])
+          .range([height, 0]);
+
+        svg.append("g")
+          .attr("id", id_str)
+          .call(d3.axisLeft(y));
+
+        svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left + 25)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .style('fill', 'darkOrange')
+          .text(yAxisLabel);
+
+        //              svg.append("path")
+        //    .datum(cost)
+        //    .attr("class", "line")
+        //    .attr("d", line);
+
+        svg.selectAll(id_str)
+          .data(cost)
+          .enter().append("circle")
+          .attr("class", "circle")
+          .attr("cx", function (d) { return x(d.year); })
+          //.attr("cy", function(d) { return y(d.cost_of_child_marriage_in_billion); })
+          .attr("cy", function (d, i) { return y(parameterSelected[i]); })
+          .attr("r", 5)
+          .style("fill", d3.color(color_code))
+          .on("mousemove", function (d, i) {
+            tooltip.classed("hidden", false)
+              .style("top", (d3.event.pageY) + "px")
+              .style("left", (d3.event.pageX + 10) + "px")
+              //.style("top",  (d3.mouse(this)[1]) + "px")
+              //.style("left",  "px")
+              //          .style("width", "200")
+              //          .style("height", "200")
+              .style("opacity", .9)
+              .html(generateHTMLForToolTip(d, i));
+
+            //console.log("onmousemove");
+          })
+          .on("mouseout", function (d, i) {
+            //d3.select(this).attr("fill","white").attr("stroke-width",1);
+            tooltip.classed("hidden", true)
+              .style("opacity", 0);
+          });
+
+        svg.append("path")
+          .datum(cost)
+          .attr("fill", "none")
+          .attr("stroke", color_code)
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function (d, i) { return x(year[i]) })
+            .y(function (d, i) { return y(parameterSelected[i]) })
+          );
+
+        // Open label
+        //xcoord = x(year[15]) ; //offset 100
+        //ycoord = y(parameterSelected[15]);
+        xcoord = x(year[15]) - 100; //offset 100
+        ycoord = y(parameterSelected[15]) + 25;
+        if (annotateChart === "annotate") {
+
+          annotation_x_coord = x(year[12]);
+          annotation_y_coord = y(parameterSelected[12]);
+          annotate(svg, annotation_x_coord, annotation_y_coord + 20, annotation_x_coord, annotation_y_coord + 110, 5, "Gap Widens as year pass");
+        }
+
+        svg.append("text")
+          .attr("x", xcoord)
+          .attr("y", ycoord)
+          .attr("font-family", "sans-serif")
+          .attr("fill", "#000")
+          .attr("text-anchor", "start")
+          .attr("font-size", "15px")
+          .attr("font-weight", "bold")
+          .attr("fill", color_code)
+          .text(lineText);
+      }
+      function generateParameter() {
+        $("#parameter").html("");
+
+        $("#parameter").append('<input type="checkbox" id="Child_Marriage_Cost" name="child_marriage" value="Child_Marriage_Cost" checked disabled > <label for="Child_Marriage_Cost">Cost Of Child Marriage</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+        $("#parameter").append('<input type="checkbox" id="Early_Child_Birth_Cost" name="child_marriage" value="Early_Child_Birth_Cost" > <label for="Early_Child_Birth_Cost">Early Child Birth due to child marriage Cost</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+        $("#parameter").append('<input type="checkbox" id="Cumulative_Cost" name="child_marriage" value="Cumulative_Cost" > <label for="Cumulative_Cost">Cumulative Cost</label> ');
+        $("#parameter").append('<div style="height: 20px;"> <br> </div>');
+      }
+
+      function handlers() {
+
+        //  clearAnnotation(svg);
+        d3.select("#parameter").on("change", function (d) {
+          is_checked_child_marriage_cost = d3.select("#Child_Marriage_Cost").property("checked");
+          is_checked_early_child_birth = d3.select("#Early_Child_Birth_Cost").property("checked");
+          is_checked_cumulative_cost = d3.select("#Cumulative_Cost").property("checked");
+
+          svg.selectAll("*").remove();
+
+          domain = [];
+
+          if (is_checked_cumulative_cost) {
+            domain = [0, 1300]
+            parameterSelected = cumulative_cost;
+            plotLineChart(svg, parameterSelected, 0, "#80b8f0", "plot3", domain, "cumulative cost", "Cost In US $ Billion", "annotate");
+          }
+          else {
+            domain = [0, 750]
+          }
+          parameterSelected = cost_of_child_marriage_in_billion;
+          //plotChart1 lightseagreen --> #20B2AA lightcolral --> #F08080
+          plotLineChart(svg, parameterSelected, 0, "#F08080", "plot1", domain, "child marriage cost", "Cost In US $ Billion");
+          if (is_checked_early_child_birth) {
+            parameterSelected = cost_of_early_childbirth_in_billion;
+            plotLineChart(svg, parameterSelected, 0, "#20B2AA", "plot2", domain, "early child birth cost", "Cost In US $ Billion");
+          }
+
+        });
+      }
+
+      function generateHTMLForToolTip(d, i) {
+        var tooltipHTML = "<p>";
+        tooltipHTML += "Cost in US Billion $ : ";
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  Cost Of Child Marriage : ";
+        tooltipHTML += cost_of_child_marriage_in_billion[i];
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  Cost Of Early Child Birth : ";
+        tooltipHTML += cost_of_early_childbirth_in_billion[i];
+        tooltipHTML += "<br></br>"
+        tooltipHTML += "  Total Cost of Child Marriage : ";
+        tooltipHTML += cumulative_cost[i];
+        tooltipHTML += "<br></br></p>"
+        return tooltipHTML;
+      }
+
+      function generateMessage(message) {
+        $("#scene-message").html("<p>" + message + "</p>");
+      }
+    }
+  </script>
+
+</div>
