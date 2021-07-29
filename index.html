@@ -11,6 +11,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://d3js.org/topojson.v3.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <script src="lib/intro.min.js"></script>
+  <link rel="stylesheet" href="css/introjs.min.css">
   <link rel="stylesheet" href="index.css">
   <style>
     div.tooltip {   
@@ -176,7 +178,7 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-btn" class="card">
+  <div id="scene-btn" class="card" data-intro = "Use these buttons to navigate through different scenes" data-step="1" data-position="right" >
     <button class="button slide-button" id="home-button" onclick="changeRoute('scene-1.html')">Home</button>
     <button class="button slide-button" id="prev-button">Prev</button>
     <button class="button slide-button" id="scene-1" style="display: none;" onclick="changeRoute('scene-1.html')">1</button>
@@ -189,7 +191,7 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="parameter" class="vertical-radio-buttons">
+  <div id="parameter" class="vertical-radio-buttons" data-intro = "Explore charts by changing these parameters" data-step="2" data-position="right" >
 
     <div id="scene-parameter" class="card">
       <!--
@@ -202,7 +204,7 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-message" class="card">
+  <div id="scene-message" class="card" data-intro = "Intersting details you would like to know" data-step="3" data-position="right">
       <!--
         will be generated dynamically per scene
       -->
@@ -225,13 +227,14 @@
 </div>
 
 <body>
-  <div id="container">
+  <div id="container" data-intro = "Mouse Over on Charts to explore data points on charts" data-step="4" data-position="right">
     <div id="body-container">
       <div id="content"></div>
     </div>
   </div>
 </body>
 <script>
+  introJs().start();
   function changeRoute(path) {
     $('#content').load('pages/' + path, function () { init() })
   }
