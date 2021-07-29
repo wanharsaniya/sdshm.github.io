@@ -25,17 +25,7 @@
       fill: steelblue;
     }
 
-    div.tooltip {
-      position: absolute;
-      text-align: center;
-      padding: 2px;
-      font: 12px sans-serif;
-      background: lightsteelblue;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-      opacity: 0;
-    }
+   
   </style>
   <div id="chart_1">
     <p style="text-align: center"><strong> <mark>Welfare Cost of Child Marriage and Early Childbirths Due to Population Growth</mark>
@@ -196,7 +186,7 @@
 
           annotation_x_coord = x(year[12]);
           annotation_y_coord = y(parameterSelected[12]);
-          annotate(svg, annotation_x_coord, annotation_y_coord + 20, annotation_x_coord, annotation_y_coord + 110, 5, "Gap Widens as year pass");
+          annotate(svg, annotation_x_coord, annotation_y_coord + 20, annotation_x_coord, annotation_y_coord + 150, 5, "Gap Widens as time pass");
         }
 
         svg.append("text")
@@ -253,17 +243,17 @@
       }
 
       function generateHTMLForToolTip(d, i) {
-        var tooltipHTML = "<p>";
-        tooltipHTML += "Cost in US Billion $ : ";
+        var tooltipHTML = '<p';
+        tooltipHTML += '<p>$       Cost in US Billion Dollar    $</p>';
         tooltipHTML += "<br></br>"
         tooltipHTML += "  Cost Of Child Marriage : ";
-        tooltipHTML += cost_of_child_marriage_in_billion[i];
+        tooltipHTML += cost_of_child_marriage_in_billion[i] + " B$"
         tooltipHTML += "<br></br>"
         tooltipHTML += "  Cost Of Early Child Birth : ";
-        tooltipHTML += cost_of_early_childbirth_in_billion[i];
+        tooltipHTML += cost_of_early_childbirth_in_billion[i] + " B$";
         tooltipHTML += "<br></br>"
         tooltipHTML += "  Total Cost of Child Marriage : ";
-        tooltipHTML += cumulative_cost[i];
+        tooltipHTML += cumulative_cost[i] + " B$";
         tooltipHTML += "<br></br></p>"
         return tooltipHTML;
       }
