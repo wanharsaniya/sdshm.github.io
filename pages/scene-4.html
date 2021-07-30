@@ -27,7 +27,7 @@
 
    
   </style>
-  <div id="chart_1">
+  <div id="chart_1" data-intro = "Increase in population and early child birth(which is side effect of child marriage) results in increased welfare cost. Let's explore how much" data-step="8" data-position="auto">
     <p style="text-align: center"><strong> <mark>Welfare Cost of Child Marriage and Early Childbirths Due to Population Growth</mark>
         <mark></mark></strong></p>
     <text id="antText"></text>
@@ -36,6 +36,8 @@
     async function init() {
       currentSlide = 4;
       displayCurrentSlide(currentSlide);
+      introJs().goToStepNumber(8).start();
+
       var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);

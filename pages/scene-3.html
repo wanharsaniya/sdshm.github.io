@@ -4,7 +4,7 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="lib/common.js"></script>
 
-  <div id="chart_1">
+  <div id="chart_1" data-intro = "Child Marriage increases population, Abolishing the practise will result in 'Reduction in Population Growth Rate'" data-step="7" data-position="auto">
     <p style="text-align: center"><strong> <mark> Reduction in Population Growth Rate from Ending Child Marriage </mark>
         <mark></mark></strong></p>
     <text id="antText"></text>
@@ -21,7 +21,8 @@
   <script>
     async function init() {
       currentSlide = 3;
-      displayCurrentSlide(currentSlide)
+      displayCurrentSlide(currentSlide);
+      introJs().goToStepNumber(7).start();
 
       //alert("ToolTip and Annotation Pending : The effects depend on the country, ranging from fairly small impacts in the case of Pakistan to very large impacts in the case of Niger.")
 

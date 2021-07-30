@@ -8,8 +8,9 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="lib/common.js"></script>
 
-  <div id="chart_1">
-    <p style="text-align: center"><strong> <mark>Impact on Fertiliyt by age of marriage</mark>
+
+  <div id="chart_1"  data-intro = "Child Marriage increases Total Fertility % resulting in early child birth and increased population" data-step="6" data-position="auto" >
+    <p style="text-align: center"><strong> <mark>Impact on Fertility by age of marriage</mark>
         </strong></p>
     <text id="antText"></text>
   </div>
@@ -27,6 +28,7 @@
     async function init() {
 
       currentSlide = 2;
+      introJs().goToStepNumber(6).start();
       displayCurrentSlide(currentSlide)
 
       var tooltip = d3.select("body").append("div")
