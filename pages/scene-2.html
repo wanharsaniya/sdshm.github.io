@@ -27,6 +27,7 @@
     async function init() {
 
       currentSlide = 2;
+      displayCurrentSlide(currentSlide)
 
       var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")

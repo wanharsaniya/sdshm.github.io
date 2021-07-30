@@ -312,7 +312,10 @@ async function init() {
     }
   };
 
+
+
   currentSlide = 1;
+  displayCurrentSlide(currentSlide);
   var width = 960,
     height = 600;
 

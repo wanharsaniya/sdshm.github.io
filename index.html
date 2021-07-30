@@ -134,12 +134,12 @@
       border: none;
       color: white;
       margin: 0;
-      padding: 0 12px;
-      width: 60px;
+      padding: 0 2px;
+      width: 40px;
       cursor: pointer;
       height: 30px;
-      box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
-      margin-left: 5px;
+      box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
+      margin-left: 0px;
     }
 
   .vertical-radio-buttons div {
@@ -169,7 +169,7 @@
   </style>
 </head>
 
-<div id="header" style="height: 100px;">
+<div id="header" style="height: 100px;" data-intro = "The Message : Child Marriage impacts world population and economy! " data-step="1" ata-position="auto">
   <h1>Child Marriage Impact on Population and Economy</h1>
 </div>
 
@@ -178,20 +178,20 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-btn" class="card" data-intro = "Use these buttons to navigate through different scenes" data-step="1" data-position="right" >
-    <button class="button slide-button" id="home-button" onclick="changeRoute('scene-1.html')">Home</button>
+  <div id="scene-btn" class="card" data-intro = "Use these buttons to navigate through different scenes to understand how" data-step="2" data-position="right" >
     <button class="button slide-button" id="prev-button">Prev</button>
-    <button class="button slide-button" id="scene-1" style="display: none;" onclick="changeRoute('scene-1.html')">1</button>
-    <button class="button slide-button" id="scene-2" style="display: none;" onclick="changeRoute('scene-2.html')">2</button>
-    <button class="button slide-button" id="scene-3" style="display: none;" onclick="changeRoute('scene-3.html')">3</button>
-    <button class="button slide-button" id="scene-6"  style="display: none;" onclick="changeRoute('scene-4.html')">4</button>
+    <button class="button slide-button" id="home-button" style="display: none;" onclick="changeRoute('scene-1.html')">Home</button>
+    <button class="button slide-button" id="scene-btn-1"  onclick="changeRoute('scene-1.html')">1</button>
+    <button class="button slide-button" id="scene-btn-2"  onclick="changeRoute('scene-2.html')">2</button>
+    <button class="button slide-button" id="scene-btn-3"  onclick="changeRoute('scene-3.html')">3</button>
+    <button class="button slide-button" id="scene-btn-4"  onclick="changeRoute('scene-4.html')">4</button>
     <button class="button slide-button" id="next-button">Next</button>
   </div>
 
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="parameter" class="vertical-radio-buttons" data-intro = "Explore charts by changing these parameters" data-step="2" data-position="right" >
+  <div id="parameter" class="vertical-radio-buttons" data-intro = "Explore charts by changing these parameters" data-step="3" data-position="right" >
 
     <div id="scene-parameter" class="card">
       <!--
@@ -204,7 +204,7 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-message" class="card" data-intro = "Intersting details you would like to know" data-step="3" data-position="right">
+  <div id="scene-message" class="card" data-intro = "Intersting details you would like to know" data-step="4" data-position="right">
       <!--
         will be generated dynamically per scene
       -->
@@ -229,7 +229,7 @@
 <body>
   <div id="container" >
     <div id="body-container">
-      <div id="content" data-intro = "Mouse Over on Charts to explore data points on charts" data-step="4" data-position="auto"></div>
+      <div id="content" data-intro = "Mouse Over on Charts to explore data points on charts" data-step="5" data-position="auto"></div>
     </div>
   </div>
 </body>
