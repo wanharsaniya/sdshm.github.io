@@ -6,8 +6,6 @@
   <script src='https://d3js.org/d3.v5.min.js'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://d3js.org/topojson.v3.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
@@ -16,18 +14,19 @@
   <link rel="stylesheet" href="css/introjs.min.css">
   <link rel="stylesheet" href="index.css">
   <style>
-    div.tooltip {   
-    position: absolute;         
-    text-align: center;         
-    padding: 2px;               
-    font: 10px sans-serif;      
-    background: lightskyblue; 
-    color:black;
-    border: 0px;        
-    border-radius: 8px;         
-    pointer-events: none;           
-    opacity: 0; 
-}
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      padding: 2px;
+      font: 10px sans-serif;
+      background: lightskyblue;
+      color: black;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+    }
+
     .left {
       width: 30%;
     }
@@ -42,8 +41,9 @@
     a {
       cursor: pointer;
     }
-    p{
-    text-align: left;
+
+    p {
+      text-align: left;
     }
 
     h1 {
@@ -143,34 +143,35 @@
       margin-left: 0px;
     }
 
-  .vertical-radio-buttons div {
-  display: block;
-  padding: 5px 5px 5px 5px;
-  clear: both;
-}
+    .vertical-radio-buttons div {
+      display: block;
+      padding: 5px 5px 5px 5px;
+      clear: both;
+    }
 
-.vertical-radio-buttons span {
-  display: block;
-  padding-left: 20px;
-  cursor: inherit;
-}
+    .vertical-radio-buttons span {
+      display: block;
+      padding-left: 20px;
+      cursor: inherit;
+    }
 
-.vertical-radio-buttons label {
-  font-size: rem-calc(16);
-}
+    .vertical-radio-buttons label {
+      font-size: rem-calc(16);
+    }
 
-.vertical-radio-buttons input {
-  float: left;
-  width: 20px;
-  margin-left: 20px;
-  margin-top: 6px; 
-  padding: 0;
-  -webkit-appearance: radio;
-}
+    .vertical-radio-buttons input {
+      float: left;
+      width: 20px;
+      margin-left: 20px;
+      margin-top: 6px;
+      padding: 0;
+      -webkit-appearance: radio;
+    }
   </style>
 </head>
 
-<div id="header" style="height: 100px;" data-intro = "The Message : Child Marriage impacts world population and economy! " data-step="1" ata-position="auto">
+<div id="header" style="height: 100px;" data-intro="The Message : Child Marriage impacts world population and economy! "
+  data-step="1" ata-position="auto">
   <h1>Child Marriage Impact on Population and Economy</h1>
 </div>
 
@@ -179,34 +180,38 @@
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-btn" class="card" data-intro = "Use these buttons to navigate through different scenes " data-step="2" data-position="right" >
+  <div id="scene-btn" class="card" data-intro="Use these buttons to navigate through different scenes " data-step="2"
+    data-position="right">
     <button class="button slide-button" id="prev-button">Prev</button>
-    <button class="button slide-button" id="home-button" style="display: none;" onclick="changeRoute('scene-1.html')">Home</button>
-    <button class="button slide-button" id="scene-btn-1"  onclick="changeRoute('scene-1.html')">1</button>
-    <button class="button slide-button" id="scene-btn-2"  onclick="changeRoute('scene-2.html')">2</button>
-    <button class="button slide-button" id="scene-btn-3"  onclick="changeRoute('scene-3.html')">3</button>
-    <button class="button slide-button" id="scene-btn-4"  onclick="changeRoute('scene-4.html')">4</button>
+    <button class="button slide-button" id="home-button" style="display: none;"
+      onclick="changeRoute('scene-1.html')">Home</button>
+    <button class="button slide-button" id="scene-btn-1" onclick="changeRoute('scene-1.html')">1</button>
+    <button class="button slide-button" id="scene-btn-2" onclick="changeRoute('scene-2.html')">2</button>
+    <button class="button slide-button" id="scene-btn-3" onclick="changeRoute('scene-3.html')">3</button>
+    <button class="button slide-button" id="scene-btn-4" onclick="changeRoute('scene-4.html')">4</button>
     <button class="button slide-button" id="next-button">Next</button>
   </div>
 
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="parameter" class="vertical-radio-buttons" data-intro = "Explore charts by changing these parameters" data-step="3" data-position="right" >
+  <div id="parameter" class="vertical-radio-buttons" data-intro="Explore charts by changing these parameters"
+    data-step="3" data-position="right">
 
     <div id="scene-parameter" class="card">
       <!--
         will be generated dynamically per scene
       -->
-      </div>
-     
+    </div>
+
   </div>
 
   <div style="height: 20px;">
     <br>
   </div>
-  <div id="scene-message" class="card" data-intro = "Intersting details you would like to know" data-step="4" data-position="right">
-      <!--
+  <div id="scene-message" class="card" data-intro="Intersting details you would like to know" data-step="4"
+    data-position="right">
+    <!--
         will be generated dynamically per scene
       -->
   </div>
@@ -228,9 +233,10 @@
 </div>
 
 <body>
-  <div id="container" >
+  <div id="container">
     <div id="body-container">
-      <div id="content" data-intro = "Mouse Over on Charts to explore data points on charts" data-step="5" data-position="auto"></div>
+      <div id="content" data-intro="Mouse Over on Charts to explore data points on charts" data-step="5"
+        data-position="auto"></div>
     </div>
   </div>
 </body>

@@ -46,7 +46,7 @@ async function init() {
 
 
       d3.select("#Female_Married_by_15").on("change", function (d) {
-        console.log(d);
+        //console.log(d);
         clearAnnotation(svg);
         obj.renderOnParameterChange(world, child_marriage_by_country, names, "Female_Married_by_15");
         annotate(svg, (width / 2) - 50, height / 2, 60, 225, 20, "#Female Married under 15 highest in Sub Saharan Region");
@@ -188,7 +188,7 @@ async function init() {
             .style("opacity", .9)
             .html(generateHTMLForToolTip(d));
 
-          console.log("onmousemove");
+          //console.log("onmousemove");
         })
         .on("mouseout", function (d, i) {
           //d3.select(this).attr("fill","white").attr("stroke-width",1);
@@ -326,11 +326,11 @@ async function init() {
     .attr("height", height);
   let obj = new WorldMap(svg);
 
-  var scene_1_message = "<p> Child marriage is generally understood to mean marriages that take place before age 18, but for many girls, marriage occurs much earlier. In some countries, girls as young as 7 or 8 are forced by their families to marry much older men. </p> " + 
-  "<p>Every year, 12 million girls marry before the age of 18. Child marriage happens across countries, cultures and religions.</p>" +
-  "<p> The international community and country governments are increasingly aware of the negative impacts of child marriage, yet investments to end the practice remain limited. </p>" +
-  "<p>In order to inspire greater commitments towards ending child marriage, this visualization demonstrates the negative impacts of the practice on population growth and its economic costs globally.</p>" 
-  + "<p>This visualization is based on a study by  International Bank for Reconstruction and Development / The World Bank and The International Center for Research on Women (ICRW), Washington, DC</p>"
+  var scene_1_message = "<p> Child marriage is generally understood to mean marriages that take place before age 18, but for many girls, marriage occurs much earlier. In some countries, girls as young as 7 or 8 are forced by their families to marry much older men. </p> " +
+    "<p>Every year, 12 million girls marry before the age of 18. Child marriage happens across countries, cultures and religions.</p>" +
+    "<p> The international community and country governments are increasingly aware of the negative impacts of child marriage, yet investments to end the practice remain limited. </p>" +
+    "<p>In order to inspire greater commitments towards ending child marriage, this visualization demonstrates the negative impacts of the practice on population growth and its economic costs globally.</p>"
+    + "<p>This visualization is based on a study by  International Bank for Reconstruction and Development / The World Bank and The International Center for Research on Women (ICRW), Washington, DC</p>"
 
   obj.generateMessage(scene_1_message);
   obj.generateParameter()

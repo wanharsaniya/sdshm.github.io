@@ -1,26 +1,26 @@
-<!--
-  http://bl.ocks.org/larskotthoff/601c66edfb83a11cf2bb
--->
 <div id="scene_2">
-  
+
 
   <!-- Step 1. Load D3 and topoJSON libraries -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="lib/common.js"></script>
 
 
-  <div id="chart_1"  data-intro = "Child Marriage increases Total Fertility % resulting in early child birth and increased population" data-step="6" data-position="auto" >
+  <div id="chart_1"
+    data-intro="Child Marriage increases Total Fertility % resulting in early child birth and increased population"
+    data-step="6" data-position="auto">
     <p style="text-align: center"><strong> <mark>Impact on Fertility by age of marriage</mark>
-        </strong></p>
+      </strong></p>
     <text id="antText"></text>
   </div>
   <div id="chart_2">
     <br></br>
     <br></br>
     <p style="text-align: center"><strong> <mark>Predicted Fertility Rate</mark> </strong>
-    <strong style="color:#F08080">  With </strong> <mark>vs</mark>
-    <strong style="color:#20B2AA">Without</strong> 
-    <strong> <mark>Child Marriage </mark></strong> </p>
+      <strong style="color:#F08080"> With </strong> <mark>vs</mark>
+      <strong style="color:#20B2AA">Without</strong>
+      <strong> <mark>Child Marriage </mark></strong>
+    </p>
     <text id="antText"></text>
   </div>
 
@@ -38,11 +38,11 @@
 
       generateParameter();
       var scene_2_message = "<p><strong>Child marriage contributes to women both having children earlier and having more children over their lifetime than if they had married later. In turn, the effects of child marriage on fertility have implications for population growth and economic welfare.</strong></p>"
-       + "<p> Point tot be noted, Male Child marriage has little impact on fertility,population growth and economy</p>"
-       + "<p> Total fertility is defined as the number of live births that women are (statistically) expected to have over their lifetime under current conditions. Controlling for other factors affecting total fertility, on average across 15 countries, a girl marrying at 13 will have 26 percent more children over her lifetime than if she had married at 18 or later</p>"
-      + "<p>Child marriage contributes to higher total fertility as women marrying earlier tend to both have children earlier and more children over their lifetime than if they had married later.</p>"
-       + "<p> In countries shown in chart, the impact at the margin of child marriage on total fertility tends to be large. </p>"
-       + "<p>  If child marriage were eliminated, this would reduce total fertility on average by 0.59 live births across countries, the equivalent of a reduction of 11 percent versus current values </p>"
+        + "<p> Point tot be noted, Male Child marriage has little impact on fertility,population growth and economy</p>"
+        + "<p> Total fertility is defined as the number of live births that women are (statistically) expected to have over their lifetime under current conditions. Controlling for other factors affecting total fertility, on average across 15 countries, a girl marrying at 13 will have 26 percent more children over her lifetime than if she had married at 18 or later</p>"
+        + "<p>Child marriage contributes to higher total fertility as women marrying earlier tend to both have children earlier and more children over their lifetime than if they had married later.</p>"
+        + "<p> In countries shown in chart, the impact at the margin of child marriage on total fertility tends to be large. </p>"
+        + "<p>  If child marriage were eliminated, this would reduce total fertility on average by 0.59 live births across countries, the equivalent of a reduction of 11 percent versus current values </p>"
       generateMessage(scene_2_message);
       handlers()
 
@@ -221,45 +221,49 @@
 
       function handlers() {
 
+
         //  clearAnnotation(svg);
         let plot_married_by_13 = false;
         let plot_married_by_17 = false;
         d3.select("#parameter").on("change", function (d) {
-          plot_married_by_13 = d3.select("#Female_Married_by_13").property("checked");
-          plot_married_by_17 = true; //d3.select("#Female_Married_by_17").property("checked");
-          if (plot_married_by_13 && plot_married_by_17) {
-            svg_1.selectAll("*").remove();
-            plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
-            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "", "%");
-          }
-          else if (plot_married_by_17) {
-            svg_1.selectAll("*").remove();
-            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
-          }
-          else if (plot_married_by_13) {
-            svg_1.selectAll("*").remove();
-            plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
+          if (currentSlide === 2) {
+            //console.log("slide 2 handler")
+            plot_married_by_13 = d3.select("#Female_Married_by_13").property("checked");
+            plot_married_by_17 = true; //d3.select("#Female_Married_by_17").property("checked");
+            if (plot_married_by_13 && plot_married_by_17) {
+              svg_1.selectAll("*").remove();
+              plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
+              plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "", "%");
+            }
+            else if (plot_married_by_17) {
+              svg_1.selectAll("*").remove();
+              plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
+            }
+            else if (plot_married_by_13) {
+              svg_1.selectAll("*").remove();
+              plotbarChart(svg_1, marriedBy13, 10, "#F08080", "plot1", [0, 40], "Total Fertility %", "%");
 
-          }
-          else {
-            svg_1.selectAll("*").remove();
-            plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
-            d3.select("#Female_Married_by_17").property("checked").property("checked", true);
-          }
+            }
+            else {
+              svg_1.selectAll("*").remove();
+              plotbarChart(svg_1, marriedBy17, 0, "#20B2AA", "plot1", [0, 40], "Total Fertility %", "%");
+              d3.select("#Female_Married_by_17").property("checked").property("checked", true);
+            }
 
 
-          plot_reduction_in_fertility_percentage = d3.select("#Reduction_In_Fertility").property("checked");
-          if (plot_reduction_in_fertility_percentage) {
-            svg_2.selectAll("*").remove();
-            plotbarChart(svg_2, reductionInFertilityPercent, 0, "#20B2AA", "plot1", [0, 25], "Reduction In Fertility %", "%");
-            annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh will benifit most by abolishing child marriage");
-          }
-          else {
-            //plotChart2
-            svg_2.selectAll("*").remove();
-            plotbarChart(svg_2, predictedFertiltiy, 10, "#F08080", "#FF8C00", [0, 8], "Fertility Rate");
-            plotbarChart(svg_2, predictedFertiltiyWOCHildMarriage, 0, "#20B2AA", "plot1", [0, 8]);
-            annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh will benifit most by abolishing child marriage");
+            plot_reduction_in_fertility_percentage = d3.select("#Reduction_In_Fertility").property("checked");
+            if (plot_reduction_in_fertility_percentage) {
+              svg_2.selectAll("*").remove();
+              plotbarChart(svg_2, reductionInFertilityPercent, 0, "#20B2AA", "plot1", [0, 25], "Reduction In Fertility %", "%");
+              annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh will benifit most by abolishing child marriage");
+            }
+            else {
+              //plotChart2
+              svg_2.selectAll("*").remove();
+              plotbarChart(svg_2, predictedFertiltiy, 10, "#F08080", "#FF8C00", [0, 8], "Fertility Rate");
+              plotbarChart(svg_2, predictedFertiltiyWOCHildMarriage, 0, "#20B2AA", "plot1", [0, 8]);
+              annotate(svg_2, 65, 10, 20, 50, 10, "Bangladesh will benifit most by abolishing child marriage");
+            }
           }
         });
 
@@ -268,7 +272,7 @@
       function generateHTMLForToolTip(d, i) {
         var tooltipHTML = "<p>";
         tooltipHTML += "Country : ";
-        console.log(i);
+        //console.log(i);
         tooltipHTML += countries[i];
         tooltipHTML += "<br></br>"
         tooltipHTML += "Impact on Fertility by child marriage at :";

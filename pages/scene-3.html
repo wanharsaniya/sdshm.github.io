@@ -1,10 +1,12 @@
 <div id="scene_3">
-  
+
   <!-- Step 1. Load D3 and topoJSON libraries -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="lib/common.js"></script>
 
-  <div id="chart_1" data-intro = "Child Marriage increases population, Abolishing the practise will result in 'Reduction in Population Growth Rate'" data-step="7" data-position="auto">
+  <div id="chart_1"
+    data-intro="Child Marriage increases population, Abolishing the practise will result in 'Reduction in Population Growth Rate'"
+    data-step="7" data-position="auto">
     <p style="text-align: center"><strong> <mark> Reduction in Population Growth Rate from Ending Child Marriage </mark>
         <mark></mark></strong></p>
     <text id="antText"></text>
@@ -55,9 +57,9 @@
         pop_growth_rate_2015.push(pop_growth_rate[i].year_2015);
         pop_growth_rate_2030.push(pop_growth_rate[i].year_2030);
       }
-      console.log(countries);
-      console.log(pop_growth_rate_2015);
-      console.log(pop_growth_rate_2030);
+      //console.log(countries);
+      //console.log(pop_growth_rate_2015);
+      //console.log(pop_growth_rate_2030);
       var parameterSelected = pop_growth_rate_2015;
 
       // append the svg object to the body of the page
@@ -115,17 +117,17 @@
           .append("rect")
           .attr("id", id_str)
           .attr("x", function (d, i) {
-            console.log(x(countries[i]))
+            //console.log(x(countries[i]))
             return x(countries[i]) + parseInt(shift);
           })
           .attr("y", function (d, i) {
-            console.log(y(parameterSelected[i]));
+            //console.log(y(parameterSelected[i]));
             return y(parameterSelected[i]);
           })
           .attr("width", x.bandwidth() / 4)
           .attr("height", function (d, i) {
-            console.log(height)
-            console.log(y(parameterSelected[i]))
+            //console.log(height)
+            //console.log(y(parameterSelected[i]))
             return height - parseInt(y(parameterSelected[i]));
             //return parseInt(height) - parseInt(y(marriedBy13)); 
           })
@@ -151,11 +153,11 @@
           .enter()
           .append("text")
           .attr("x", function (d, i) {
-            console.log(x(countries[i]))
+            //console.log(x(countries[i]))
             return x(countries[i]) + parseInt(shift);
           })
           .attr("y", function (d, i) {
-            console.log(y(parameterSelected[i]));
+            //console.log(y(parameterSelected[i]));
             return y(parameterSelected[i]);
           })
           .text(function (d, i) { return parameterSelected[i]; })
@@ -195,7 +197,7 @@
       function generateHTMLForToolTip(d, i) {
         var tooltipHTML = "<p>";
         tooltipHTML += "Country : ";
-        console.log(i);
+        //console.log(i);
         tooltipHTML += countries[i];
         tooltipHTML += "<br></br>"
         tooltipHTML += "Reduction in Population Growth Rate By Abolishing Child Marriage by year :";
@@ -218,4 +220,3 @@
     }
   </script>
 </div>
-

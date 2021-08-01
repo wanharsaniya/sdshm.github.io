@@ -1,6 +1,3 @@
-<!--
-    https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89
--->
 <div id="scene_4">
   <style>
     .bar {
@@ -24,11 +21,12 @@
     .circle {
       fill: steelblue;
     }
-
-   
   </style>
-  <div id="chart_1" data-intro = "Increase in population and early child birth(which is side effect of child marriage) results in increased welfare cost. Let's explore how much" data-step="8" data-position="auto">
-    <p style="text-align: center"><strong> <mark>Welfare Cost of Child Marriage and Early Childbirths Due to Population Growth</mark>
+  <div id="chart_1"
+    data-intro="Increase in population and early child birth(which is side effect of child marriage) results in increased welfare cost. Let's explore how much"
+    data-step="8" data-position="auto">
+    <p style="text-align: center"><strong> <mark>Welfare Cost of Child Marriage and Early Childbirths Due to Population
+          Growth</mark>
         <mark></mark></strong></p>
     <text id="antText"></text>
   </div>
@@ -43,12 +41,12 @@
         .style("opacity", 0);
 
       generateParameter();
-      var scene_4_message = 
-                  "<p>Cross-country analyses demonstrate a one-to-one relationship between population growth and growth in GDP per capita. The relationship between economic and population growth can be used to assess benefits from a reduction in population growth from ending child marriage and early childbirths. Regression analysis suggests that controlling for other variables including population growth, child marriage does not have a direct impact on growth in GDP per capita</p>"
-                   +"<p>Globally (for 106 countries), the welfare benefits that would be reaped through lower population growth from ending child marriage reach $566 billion per year in 2030. The benefits are valued at $22 billion in 2015 and $566 billion in 2030</p>"
-                   + "<p>The rapid increase in the benefits stems from the fact that the impact of child marriage and early childbirths on population growth is cumulative. </p>" 
-                  + "<p>Economic benefit from reduced population growth is the reduced pressure for state budgets to provide services to the population.</p>"
-                  + "<p>By reducing the size of cohorts, ending child marriage and early childbirth would provide significant savings for the education budget of many countries.</p>"
+      var scene_4_message =
+        "<p>Cross-country analyses demonstrate a one-to-one relationship between population growth and growth in GDP per capita. The relationship between economic and population growth can be used to assess benefits from a reduction in population growth from ending child marriage and early childbirths. Regression analysis suggests that controlling for other variables including population growth, child marriage does not have a direct impact on growth in GDP per capita</p>"
+        + "<p>Globally (for 106 countries), the welfare benefits that would be reaped through lower population growth from ending child marriage reach $566 billion per year in 2030. The benefits are valued at $22 billion in 2015 and $566 billion in 2030</p>"
+        + "<p>The rapid increase in the benefits stems from the fact that the impact of child marriage and early childbirths on population growth is cumulative. </p>"
+        + "<p>Economic benefit from reduced population growth is the reduced pressure for state budgets to provide services to the population.</p>"
+        + "<p>By reducing the size of cohorts, ending child marriage and early childbirth would provide significant savings for the education budget of many countries.</p>"
 
       generateMessage(scene_4_message);
       handlers();
@@ -81,8 +79,8 @@
       //console.log(year);
       //console.log(cost_of_child_marriage_in_billion);
       //console.log(cost_of_early_childbirth_in_billion);
-      console.log("cumulative cost")
-      console.log(cumulative_cost);
+      //console.log("cumulative cost")
+      //console.log(cumulative_cost);
 
       var svg = d3.select("#chart_1")
         .append("svg")
